@@ -308,7 +308,7 @@ proc startProcess { args } {
 	set brushName [makeBrush $flist $ranks $size $::options(spacing) $brush_title $output_file]
 	
 	puts "Deleting temporary files..."
-	# deletePullShapes $::pullshape_Files
+	deletePullShapes $::pullshape_Files
 	
 	puts "$brushName created"
 	catch {puts "All operations done. See you next time $::env(USER)"}
