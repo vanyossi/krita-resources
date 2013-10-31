@@ -232,7 +232,7 @@ proc deletePullShapes { flist } {
 # Execute gimp to create brush file
 # psdfile = sourcefile PSD, ranktotal = layers, size = max w and h,
 # spacing = brush spacing, name = brushname, outname = out	put file "gih"
-proc makeBrush { flist ranktotal size {spacing 100} {description "Pull_shapes"} {outname pull_shapes.gih} } {
+proc makeBrush { flist ranktotal size {spacing 200} {description "Pull_shapes"} {outname pull_shapes.gih} } {
 	set full_outname [file normalize $outname]
 	set cell_width $size
 	set cell_height $size
@@ -304,7 +304,7 @@ proc startProcess { args } {
 	set brush_title [validateNameArg [join $::options(input) {_}]]
 	set output_file [validateOutputName [join $::options(input) {_}]]
 	# set detault value for spacing
-	set ::options(spacing) [expr {[info exists ::options(spacing)]? $::options(spacing)} : 100 ]
+	set ::options(spacing) [expr {[info exists ::options(spacing)]? $::options(spacing)} : 200 ]
 	set brushName [makeBrush $flist $ranks $size $::options(spacing) $brush_title $output_file]
 	
 	puts "Deleting temporary files..."
