@@ -128,9 +128,10 @@ proc extractShapes { f } {
 proc processShapes { f plist {s 250} } {
 	set command [list inkscape $f -i %s -w $s -e %s]
 	set dir [file dirname [file normalize $f]]
+	set fname [file root [file tail $f]]
 	set flist {}
 	foreach path $plist {
-		set output [file join $dir pbuild_${path}.png]
+		set output [file join $dir pbuild_${fname}_${path}.png]
 		exec {*}[format $command $path $output]
 		lappend flist $output
 	}
@@ -140,7 +141,7 @@ proc processShapes { f plist {s 250} } {
 # Modifies shapes to fit inside a square and to grayscale colorspace
 # flist = file to iterate (images), size = integer desired square size
 proc normalizeSizes { flist {size 250} } {
-	set command {convert -quiet -size %s xc:white -colorspace RGB -gravity Center "%s" -resize %s -compose Over -define compose:args=100 -composite -colorspace Gray "%s"}
+	set command {convert -quiet -size %s xc:white -colorspace RGB -gravity Center "%s" -resize %s -compose Over -define compose:args=100 -composite -colorspace Gray -depth 8 -density 96x96 "%s"}
 	
 	set resize [join [list $size $size] {x}]
 	foreach image $flist {
@@ -302,12 +303,14 @@ proc startProcess { args } {
 	puts "Rendering brush file..."
 	set brush_title [validateNameArg [join $::options(input) {_}]]
 	set output_file [validateOutputName [join $::options(input) {_}]]
+	# set detault value for spacing
+	set ::options(spacing) [expr {[info exists ::options(spacing)]? $::options(spacing)} : 100 ]
 	set brushName [makeBrush $flist $ranks $size $::options(spacing) $brush_title $output_file]
 	
 	puts "Deleting temporary files..."
-	deletePullShapes $::pullshape_Files
+	# deletePullShapes $::pullshape_Files
 	
 	puts "$brushName created"
-	catch {puts "Thank you $::env(USER)"}
+	catch {puts "All operations done. See you next time $::env(USER)"}
 }
 startProcess {*}$argv
